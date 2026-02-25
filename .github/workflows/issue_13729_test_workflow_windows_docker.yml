@@ -22,6 +22,14 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
+      - name: Install msys2
+        uses: msys2/setup-msys2@d44ca8e88d8b43d56cf5670f91747359d5537f97 # v2.26.0
+        with:
+          msystem: MINGW64
+          update: true
+          path-type: inherit
+          install: >-
+            git base-devel mingw-w64-x86_64-toolchain unzip
       - name: Download archived images
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:

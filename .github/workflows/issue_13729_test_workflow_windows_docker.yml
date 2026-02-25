@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: issue_13729_Test_workflow_windows_docker
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  integration-windows:
+    strategy:
+      matrix:
+        os: [windows-2022, windows-2025]
+    runs-on: ${{ matrix.os }}
+
+    # defaults:
+    #   run:
+    #     shell: msys2 {0}
+    steps:
+      - name: Download archived images
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: images-windows
+          path: .
+          repository: spiffe/spire
+          run-id: 22362890751
+      - name: Load archived images
+        run: docker load -i images-windows.tar.gz

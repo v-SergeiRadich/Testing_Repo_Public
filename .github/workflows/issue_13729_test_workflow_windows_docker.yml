@@ -25,6 +25,7 @@ jobs:
         with:
           name: images-windows
           path: .
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: spiffe/spire
           run-id: 22362890751
       - name: Load archived images

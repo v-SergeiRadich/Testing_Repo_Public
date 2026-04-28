@@ -19,4 +19,4 @@ jobs:
     steps:
       - name: Test double brew
         run: |
-          brew update && brew update
+          brew update && brew upgrade

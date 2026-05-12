@@ -1,0 +1,37 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 513-test-parallels
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      new-password:
+        required: true
+      ports:
+        description: "Comma delimited list of ports to be forwarded"
+        required: false
+        default: "5900"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-26-intel]
+    runs-on: ${{ matrix.os }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Connect to VM
+        uses: paveliak/debug-it@main
+        with:
+          new-password: ${{ github.event.inputs.new-password }}
+          ports: ${{ github.event.inputs.ports }}
+          

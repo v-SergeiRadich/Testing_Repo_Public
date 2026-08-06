@@ -18,6 +18,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: update brew
+        run: |
+          brew update-reset && brew update
+
       - name: install parallels from official tap
         run: |
           brew install --cask parallels
@@ -33,6 +37,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: update brew
+        run: |
+          brew update-reset && brew update
+
       - name: Install custom parallels
         run: |
           TEMP_TAP="local/temp"

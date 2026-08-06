@@ -27,9 +27,15 @@ jobs:
         run: |
           brew install --cask parallels
 
+      - name: Collect required data
+        run: |
+          brew doctor
+          brew config
+          brew tap
+
       - name: Uninstall parallels from official tap
         run: |
-          brew uninstall --cask parallels
+          brew uninstall --cask parallels --verbose --debug
   
   pinned-installation:
     strategy:

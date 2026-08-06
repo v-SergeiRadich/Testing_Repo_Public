@@ -12,6 +12,7 @@ jobs:
   # This workflow contains a single job called "build"
   clean-installation:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-14, macos-15]
     runs-on: ${{ matrix.os }}
@@ -32,6 +33,7 @@ jobs:
   
   pinned-installation:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-14, macos-15]
     runs-on: ${{ matrix.os }}

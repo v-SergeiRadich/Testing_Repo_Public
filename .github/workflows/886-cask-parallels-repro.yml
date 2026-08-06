@@ -1,0 +1,62 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 886-cask-parallels-repro
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  clean-installation:
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: install parallels from official tap
+        run: |
+          brew install --cask parallels
+
+      - name: Uninstall parallels from official tap
+        run: |
+          brew uninstall --cask parallels
+  
+  pinned-installation:
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install custom parallels
+        run: |
+          TEMP_TAP="local/temp"
+          CASK_NAME="parallels"
+          CASK_URL="https://raw.githubusercontent.com/Homebrew/homebrew-cask/fb38a95f04e2b6c095c08007ea87cf0988b9eda4/Casks/p/${CASK_NAME}.rb"
+          
+          # Install parallels using temporary tap to comply with Homebrew's security requirements
+
+          brew tap-new "$TEMP_TAP"
+          brew trust --tap "$TEMP_TAP"
+          TAP_DIR="$(brew --repository "$TEMP_TAP")"
+          echo "TAP_DIR: $TAP_DIR"
+          mkdir -p "$TAP_DIR/Casks"
+          ls -la "$TAP_DIR"
+          curl -fsSL "$CASK_URL" -o "$TAP_DIR/Casks/${CASK_NAME}.rb"
+          
+          brew install --cask "$TEMP_TAP/$CASK_NAME"
+
+      - name: Uninstall custom parallels
+        run: |
+          brew uninstall --cask parallels
+
+          TEMP_TAP="local/temp"
+
+          # Clean up temporary tap and cask
+          brew untrust --tap "$TEMP_TAP" -v
+          brew untap "$TEMP_TAP" -v

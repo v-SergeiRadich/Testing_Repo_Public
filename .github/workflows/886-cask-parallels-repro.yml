@@ -48,6 +48,7 @@ jobs:
     steps:
       - name: update brew
         run: |
+          brew trust aws/tap
           brew update-reset && brew update
           brew cleanup
 

@@ -29,10 +29,11 @@ jobs:
           brew install --cask parallels
 
       - name: Collect required data
+        continue-on-error: true
         run: |
-          brew doctor
           brew config
           brew tap
+          brew doctor
 
       - name: Uninstall parallels from official tap
         run: |
@@ -48,7 +49,6 @@ jobs:
     steps:
       - name: update brew
         run: |
-          brew trust aws/tap
           brew update-reset && brew update
           brew cleanup
 
